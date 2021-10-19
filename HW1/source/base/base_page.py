@@ -5,6 +5,8 @@ from selenium.common.exceptions import (
 from selenium.webdriver.support import expected_conditions as ExpCond
 from selenium.webdriver.common.by import By
 
+from source.base.base_locators import BaseLocators
+
 class Wait:
 
     @staticmethod
@@ -47,7 +49,7 @@ class BasePage:
         if loading:
             Wait().wait_invisibility_of_element(
                 driver = self.web_driver,
-                locator= "//div[contains(@class,'spinner')]", 
+                locator= BaseLocators.SPINNER, 
                 timeout = 15
             )
         try:

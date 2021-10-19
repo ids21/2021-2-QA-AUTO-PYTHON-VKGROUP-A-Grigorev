@@ -1,7 +1,7 @@
 class DashboardLocators:
     USER_PROFILE = "//div[contains(@class,'right-module-rightButton')]"
     FIELD_LOG_OFF = (
-        "(//li[contains(@class,'rightMenu-module-rightMenuItem')]/a)[last()]"
+        "//a[contains(@href,'logout')]"
     )
     MODULE_SEGMENTS = "//a[contains(@class,'center-module-segments')]"
     MODULE_BILLINGS = "//a[contains(@class,'center-module-billing')]"
