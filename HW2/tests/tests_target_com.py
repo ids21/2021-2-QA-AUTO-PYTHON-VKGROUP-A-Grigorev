@@ -17,4 +17,12 @@ class TestDashboard(BaseCase):
         ):
             main_page_task.check_non_filled_field()
     
-
+    @pytest.mark.parametrize('credential', list(['login','password']))
+    @allure.feature("Authorization")
+    @pytest.mark.UI
+    def test_TDB002_check_incorrect_credentials(self, credential):
+        main_page_task = MainPage(self.web_driver)
+        with allure.step(
+            f"Check authorization if {credential} are incorrect"
+        ):
+            main_page_task.check_incorrect_credentials(credential)
