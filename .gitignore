@@ -133,3 +133,7 @@ dmypy.json
 
 # web drivers
 drivers/
+
+#allure directory
+result/
+report/
