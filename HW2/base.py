@@ -3,11 +3,13 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from source.main.main_page import MainPage
 from source.dashboard.dashboard_page import DashboardPage
 from conftest import get_driver
+from _pytest.fixtures import FixtureRequest
+from time import sleep
 
 
 class BaseCase:
 
-    authorize = True
+    authorize = False
 
     @pytest.fixture(scope='session')
     def cookies(self, config):
@@ -22,13 +24,15 @@ class BaseCase:
         
 
     @pytest.fixture(scope='function', autouse=True)
-    def set_initial_up(self, web_driver, config, logger, cookies):
+    def set_initial_up(self, web_driver, config, logger, request: FixtureRequest):
         self.web_driver: WebDriver = web_driver
         self.config = config
         if self.config['selenoid'] is None:
             self.logger = logger
 
         if self.authorize:
+            cookies = request.getfixturevalue('cookies')
+            sleep(3)
             for cookie in cookies:
                 if 'sameSite' in cookie:
                     if cookie['sameSite'] == 'None':
@@ -36,4 +40,4 @@ class BaseCase:
                 self.web_driver.add_cookie(cookie)
 
             self.web_driver.refresh()
-            self.dashboard = DashboardPage()
+            self.dashboard = DashboardPage(self.web_driver)

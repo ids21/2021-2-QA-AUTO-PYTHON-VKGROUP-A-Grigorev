@@ -8,5 +8,13 @@ import pytest
 @allure.epic("Dasboard Page")
 class TestDashboard(BaseCase):
 
-    authorize = False
+    @allure.feature("Authorization")
+    @pytest.mark.UI
+    def test_TDB001_check_non_filled_field(self):
+        main_page_task = MainPage(self.web_driver)
+        with allure.step(
+            "Check authorization if login and password didn't filled"
+        ):
+            main_page_task.check_non_filled_field()
     
+

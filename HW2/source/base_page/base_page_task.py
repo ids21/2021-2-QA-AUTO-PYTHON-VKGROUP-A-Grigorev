@@ -6,7 +6,11 @@ from selenium.webdriver import ActionChains
 import logging
 from selenium.webdriver.support import expected_conditions as ExpCond
 from selenium.webdriver.common.by import By
+from time import sleep
+import allure
+
 from source.base_page.base_locators import BaseLocators
+
 
 CLICK_RETRY = 3
 
@@ -40,7 +44,6 @@ class Wait:
         )
 
 
-
 class BasePage(object):
 
     def __init__(self, web_driver):
@@ -48,19 +51,20 @@ class BasePage(object):
         self.logger = logging.getLogger('test')
 
     def scroll_to(self, element):
-        self.web_driver.execute_script('arguments[0].scrollIntoView(true);', element)
+        self.web_driver.execute_script(
+            'arguments[0].scrollIntoView(true);', element)
 
     @property
     def action_chains(self):
         return ActionChains(self.driver)
 
-    def click(self,locator, timeout=None, loading = False):
+    def click(self, locator, timeout=None, loading=False):
         self.logger.info(f'Clicking on {locator}')
         if loading:
             Wait().wait_invisibility_of_element(
-                driver = self.web_driver,
-                locator= BaseLocators.SPINNER, 
-                timeout = 15
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
             )
         for i in range(CLICK_RETRY):
             try:
@@ -113,3 +117,20 @@ class BasePage(object):
         )
         text_atr: str = link.get_attribute(attribute)
         return text_atr
+
+    def shot(self, description: str, delay: float = None):
+        """Method for generating a screenshot for a report. As for a error,
+        and as for the correct result
+
+        Args:
+        - description (str): name file.
+        - delay (float):
+        """
+        if delay:
+            sleep(delay)
+        scr = self.web_driver.get_screenshot_as_png()
+        allure.attach(
+            body=scr,
+            name=f'{description}',
+            attachment_type=allure.attachment_type.PNG
+        )
