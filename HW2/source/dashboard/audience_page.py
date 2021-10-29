@@ -9,14 +9,12 @@ class AudiencePage(BasePage):
     def delete_segments(self):
         """[summary]
         """        
-        while(True):
-            if self.len_elements(AL.RECORD_SEGEMTS, retry=True)[0] is not None:
-                self.click(AL.FIELD_REMOVE)
-                self.click(AL.CONFIRM_DELETE)
-                #self.click(AL.REFRESH_TABLE)
-                self.web_driver.refresh()
-            else:
-                break
+        if self.len_elements(AL.RECORD_SEGEMTS, retry=True)[0] is not None:
+            self.click(AL.FIELD_REMOVE)
+            self.click(AL.CONFIRM_DELETE)
+            #self.click(AL.REFRESH_TABLE)
+            self.web_driver.refresh()
+
 
     def create_segments(self):
         """Create new campaign

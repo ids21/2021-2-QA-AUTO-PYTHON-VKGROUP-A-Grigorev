@@ -4,11 +4,11 @@ from base import BaseCase
 import allure
 import pytest
 
+
 @allure.epic("Main Page")
 @allure.feature("Authorization")
 class TestMainPage(BaseCase):
 
-    
     @allure.story("Check non filled field")
     @pytest.mark.UI
     def test_TMP001_check_non_filled_field(self):
@@ -17,9 +17,9 @@ class TestMainPage(BaseCase):
             "Check authorization if login and password didn't filled"
         ):
             main_page_task.check_non_filled_field()
-    
+
     @allure.story("Check incorrect credentials")
-    @pytest.mark.parametrize('credential', list(['login','password']))
+    @pytest.mark.parametrize('credential', list(['login', 'password']))
     @pytest.mark.UI
     def test_TMP002_check_incorrect_credentials(self, credential):
         main_page_task = MainPage(self.web_driver)
@@ -27,6 +27,7 @@ class TestMainPage(BaseCase):
             f"Check authorization if {credential} are incorrect"
         ):
             main_page_task.check_incorrect_credentials(credential)
+
 
 @allure.epic("Campaign Page")
 class TestCampaignPage(BaseCase):
@@ -45,6 +46,7 @@ class TestCampaignPage(BaseCase):
             self.campaign.check_campaign_added()
         with allure.step("Post processing"):
             self.campaign.delete_campaign()
+
 
 @allure.epic("Audiences Page")
 class TestAudiencesPage(BaseCase):
@@ -73,6 +75,5 @@ class TestAudiencesPage(BaseCase):
             self.audience.delete_segments()
             self.audience.create_segments()
             self.audience.delete_segments()
-        with allure.step("Did segments created?"):
+        with allure.step("Did segments deleted?"):
             self.audience.check_segments_deleted()
-
