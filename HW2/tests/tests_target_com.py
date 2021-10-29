@@ -47,3 +47,15 @@ class TestCampaignPage(BaseCase):
             self.campaign.check_campaign_added()
         with allure.step("Post processing"):
             self.campaign.delete_campaign()
+
+    @allure.story("Checking deleting campaign")
+    @pytest.mark.UI
+    def test_TCP002_check_delete_campaign(self):
+        with allure.step("Get campaign page"):
+            self.campaign = self.dashboard.get_campaign_page()
+        with allure.step("Pre processing"):
+            self.campaign.delete_campaign()
+            self.campaign.create_campaign()
+            self.campaign.delete_campaign()
+        with allure.step("Did campaign get deleted"):
+            self.campaign.check_campaign_deleted()
