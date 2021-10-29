@@ -13,14 +13,17 @@ class BaseCase:
 
     @pytest.fixture(scope='session')
     def cookies(self, config):
-        web_driver = get_driver(config)
-        web_driver.get(config['url'])
-        login_page = MainPage(web_driver)
-        login_page.login()
+        if not hasattr(config, 'workerinput'):
+            web_driver = get_driver(config)
+            web_driver.get(config['url'])
+            login_page = MainPage(web_driver)
+            login_page.login()
 
-        cookies = web_driver.get_cookies()
-        web_driver.quit()
-        return cookies
+            cookies = web_driver.get_cookies()
+            web_driver.quit()
+            return cookies
+        else:
+            return
         
 
     @pytest.fixture(scope='function', autouse=True)
@@ -32,7 +35,7 @@ class BaseCase:
 
         if self.authorize:
             cookies = request.getfixturevalue('cookies')
-            sleep(3)
+            sleep(1)
             for cookie in cookies:
                 if 'sameSite' in cookie:
                     if cookie['sameSite'] == 'None':

@@ -50,13 +50,24 @@ class BasePage(object):
         self.web_driver = web_driver
         self.logger = logging.getLogger('test')
 
+    @property
+    def action_chains(self):
+        return ActionChains(self.web_driver)
+
     def scroll_to(self, element):
         self.web_driver.execute_script(
             'arguments[0].scrollIntoView(true);', element)
 
-    @property
-    def action_chains(self):
-        return ActionChains(self.driver)
+    def move_to(self, locator):
+        element = Wait().wait_until_precence_of_lement(
+            driver=self.web_driver,
+            locator=locator,
+            timeout=30
+        )
+        chains = self.action_chains
+        chains.move_to_element(element)
+        chains.pause(1)
+        chains.perform()
 
     def click(self, locator, timeout=None, loading=False):
         self.logger.info(f'Clicking on {locator}')
@@ -101,7 +112,13 @@ class BasePage(object):
         )
         link.send_keys(text)
 
-    def is_enabled(self, locator: str) -> bool:
+    def is_enabled(self, locator: str, loading=False) -> bool:
+        if loading:
+            Wait().wait_invisibility_of_element(
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
+            )
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
@@ -134,3 +151,25 @@ class BasePage(object):
             name=f'{description}',
             attachment_type=allure.attachment_type.PNG
         )
+
+    def len_elements(self, locator: str, loading=False, retry = False):
+        if loading:
+            Wait().wait_invisibility_of_element(
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
+            )
+        if retry:
+            for _ in range(CLICK_RETRY):
+                result_search: list[object] = self.web_driver.find_elements(
+                    By.XPATH, locator)
+                number_elements_search: int = len(result_search)
+                if number_elements_search !=0:
+                    break
+                else:
+                    sleep(3)
+        if number_elements_search == 0:
+            return None, None
+        else:
+            return number_elements_search, result_search
+            

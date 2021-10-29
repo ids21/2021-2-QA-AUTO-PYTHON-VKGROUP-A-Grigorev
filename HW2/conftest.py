@@ -110,6 +110,7 @@ def get_driver(config, download_dir=None):
             raise RuntimeError(f'Unsupported browser: {browser_name}')
 
     browser.maximize_window()
+    browser.implicitly_wait(0.2)
     return browser
 
 
