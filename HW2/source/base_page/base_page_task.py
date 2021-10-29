@@ -6,7 +6,11 @@ from selenium.webdriver import ActionChains
 import logging
 from selenium.webdriver.support import expected_conditions as ExpCond
 from selenium.webdriver.common.by import By
+from time import sleep
+import allure
+
 from source.base_page.base_locators import BaseLocators
+
 
 CLICK_RETRY = 3
 
@@ -40,27 +44,38 @@ class Wait:
         )
 
 
-
 class BasePage(object):
 
     def __init__(self, web_driver):
         self.web_driver = web_driver
         self.logger = logging.getLogger('test')
 
-    def scroll_to(self, element):
-        self.web_driver.execute_script('arguments[0].scrollIntoView(true);', element)
-
     @property
     def action_chains(self):
-        return ActionChains(self.driver)
+        return ActionChains(self.web_driver)
 
-    def click(self,locator, timeout=None, loading = False):
+    def scroll_to(self, element):
+        self.web_driver.execute_script(
+            'arguments[0].scrollIntoView(true);', element)
+
+    def move_to(self, locator):
+        element = Wait().wait_until_precence_of_lement(
+            driver=self.web_driver,
+            locator=locator,
+            timeout=30
+        )
+        chains = self.action_chains
+        chains.move_to_element(element)
+        chains.pause(1)
+        chains.perform()
+
+    def click(self, locator, timeout=None, loading=True):
         self.logger.info(f'Clicking on {locator}')
         if loading:
             Wait().wait_invisibility_of_element(
-                driver = self.web_driver,
-                locator= BaseLocators.SPINNER, 
-                timeout = 15
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
             )
         for i in range(CLICK_RETRY):
             try:
@@ -97,7 +112,13 @@ class BasePage(object):
         )
         link.send_keys(text)
 
-    def is_enabled(self, locator: str) -> bool:
+    def is_enabled(self, locator: str, loading=False) -> bool:
+        if loading:
+            Wait().wait_invisibility_of_element(
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
+            )
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
@@ -113,3 +134,42 @@ class BasePage(object):
         )
         text_atr: str = link.get_attribute(attribute)
         return text_atr
+
+    def shot(self, description: str, delay: float = None):
+        """Method for generating a screenshot for a report. As for a error,
+        and as for the correct result
+
+        Args:
+        - description (str): name file.
+        - delay (float):
+        """
+        if delay:
+            sleep(delay)
+        scr = self.web_driver.get_screenshot_as_png()
+        allure.attach(
+            body=scr,
+            name=f'{description}',
+            attachment_type=allure.attachment_type.PNG
+        )
+
+    def len_elements(self, locator: str, loading=False, retry = False):
+        if loading:
+            Wait().wait_invisibility_of_element(
+                driver=self.web_driver,
+                locator=BaseLocators.SPINNER,
+                timeout=15
+            )
+        if retry:
+            for _ in range(CLICK_RETRY):
+                result_search: list[object] = self.web_driver.find_elements(
+                    By.XPATH, locator)
+                number_elements_search: int = len(result_search)
+                if number_elements_search !=0:
+                    break
+                else:
+                    sleep(3)
+        if number_elements_search == 0:
+            return None, None
+        else:
+            return number_elements_search, result_search
+            
