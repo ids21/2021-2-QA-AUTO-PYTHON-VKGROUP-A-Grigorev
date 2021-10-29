@@ -5,3 +5,4 @@ pytest-forked==1.3.0
 pytest-xdist==2.4.0
 selenium==4.0.0a5
 webdriver-manager==3.3.0
+pytest-rerunfailures==9.1.1
