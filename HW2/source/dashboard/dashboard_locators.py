@@ -8,6 +8,7 @@ class DashboardLocators:
     MODULE_STATISTICS = "//a[contains(@class,'center-module-statistics')]"
     MODULE_PROFILE = "//a[contains(@class,'center-module-profile')]"
     MODULE_CAMPAIGN = "//a[contains(@class,'center-module-campaigns')]"
+    MODULE_AUDIENCE = "//a[contains(@class,'center-module-segments')]"
     
 class BillingLocator:
     TABLE_DEPOSIT = "//div[contains(@class,'billing-page__deposit')]"
@@ -40,3 +41,13 @@ class CampaignLocator:
     REACH_BUTTON = "//div[contains(@class,'column-list-item _reach')]"
     FIELD_UPLOAD_IMAGE = "//div[contains(@class,'module-uploadButton')]"
     BUDGET_BLOCK = "//div[@class='budget-setting']"
+
+class AudienceLocator:
+    CREATE_SEGMENT = "//a[contains(@href,'segments/segments_list/new')]"
+    CREATE_SEGMENT_BUTTON = "//div[contains(@class,'create-button')]/button"
+    CHECK_BOX = "//input[contains(@class,'adding-segments-source')]"
+    BUTTON_ADD = "//div[contains(@class,'add-button')]/button"
+    BUTTON_SUBMIT_CREATE = "//div[contains(@class,'create-segment')]/button"
+    FIELD_REMOVE = "//div[contains(@data-test,'remove')]"
+    CONFIRM_DELETE = "//button[contains(@class,'button_confirm-remove')]"
+    RECORD_SEGEMTS = "//div[@role='rowgroup']//div[contains(@class,'cells')]"

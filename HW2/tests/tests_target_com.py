@@ -43,19 +43,25 @@ class TestCampaignPage(BaseCase):
         with allure.step("Create campaign"):
             self.campaign.delete_campaign()
             self.campaign.create_campaign()
-        with allure.step("Did campaign get created"):
+        with allure.step("Did campaign created?"):
             self.campaign.check_campaign_added()
         with allure.step("Post processing"):
             self.campaign.delete_campaign()
 
-    @allure.story("Checking deleting campaign")
+@allure.epic("Audiences Page")
+class TestAudiencesPage(BaseCase):
+
+    authorize = True
+
+    @allure.story("Checking creating new segments")
     @pytest.mark.UI
-    def test_TCP002_check_delete_campaign(self):
-        with allure.step("Get campaign page"):
-            self.campaign = self.dashboard.get_campaign_page()
-        with allure.step("Pre processing"):
-            self.campaign.delete_campaign()
-            self.campaign.create_campaign()
-            self.campaign.delete_campaign()
-        with allure.step("Did campaign get deleted"):
-            self.campaign.check_campaign_deleted()
+    def test_TAP001_check_creating_new_segments(self):
+        with allure.step("Get audience page"):
+            self.audience = self.dashboard.get_audience_page()
+        with allure.step("Create segments"):
+            self.audience.delete_segments()
+            self.audience.create_segments()
+        with allure.step("Did segments created?"):
+            self.audience.check_segments_added()
+        with allure.step("Post processing"):
+            self.audience.delete_segments()

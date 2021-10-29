@@ -12,16 +12,16 @@ class CampaignPage(BasePage):
     def create_campaign(self):
         """Create new campaign
         """        
-        if self.is_enabled(CL.BUTTON_CREATE_CAMPAIGN, loading=True):
-            self.click(CL.BUTTON_CREATE_CAMPAIGN, loading=True)
+        if self.is_enabled(CL.BUTTON_CREATE_CAMPAIGN):
+            self.click(CL.BUTTON_CREATE_CAMPAIGN)
         else:
-            self.click(CL.BUTTON_CREATE, loading=True)
-        self.click(CL.REACH_BUTTON, loading=True)
+            self.click(CL.BUTTON_CREATE)
+        self.click(CL.REACH_BUTTON)
         self.keys(CL.INPUT_LINK, Credentials.CAMPAIGN_LINK)
         self.move_to(CL.BUDGET_BLOCK)
         self.keys(CL.BUDGET_PER_DAY, '100')
         self.keys(CL.BUDGET_TOTAL,'1000')
-        self.click(CL.FIELD_BANNER, loading=True)
+        self.click(CL.FIELD_BANNER)
         directory = os.getcwd()
         scr = os.path.join(directory, "test.jpeg")
         self.move_to(CL.FIELD_UPLOAD_IMAGE)
@@ -34,7 +34,7 @@ class CampaignPage(BasePage):
         """[summary]
         """      
         try:
-            assert self.is_enabled(CL.RECORD_CAMPAIGN, loading=True)
+            assert self.is_enabled(CL.RECORD_CAMPAIGN)
         except:
             assert False, "Campaign dont created"
         finally:
@@ -44,7 +44,7 @@ class CampaignPage(BasePage):
         """[summary]
         """        
         while(True):
-            if self.len_elements(CL.RECORD_CAMPAIGN, loading=True, retry=True)[0] is not None:
+            if self.len_elements(CL.RECORD_CAMPAIGN, retry=True)[0] is not None:
                 self.click(CL.SELECT_RECORD)
                 self.click(CL.DROP_ACTIONS)
                 self.click(CL.DELETE_RECORD)
@@ -52,15 +52,6 @@ class CampaignPage(BasePage):
                 self.web_driver.refresh()
             else:
                 break
-    
-    def check_campaign_deleted(self):
-        try:
-            num = self.len_elements(CL.RECORD_CAMPAIGN, loading=True, retry=True)[0]
-            assert num == None
-        except:
-            assert False, "Campaign dont deleted"
-        finally:
-            self.shot("After deleting")
 
 
 

@@ -69,7 +69,7 @@ class BasePage(object):
         chains.pause(1)
         chains.perform()
 
-    def click(self, locator, timeout=None, loading=False):
+    def click(self, locator, timeout=None, loading=True):
         self.logger.info(f'Clicking on {locator}')
         if loading:
             Wait().wait_invisibility_of_element(

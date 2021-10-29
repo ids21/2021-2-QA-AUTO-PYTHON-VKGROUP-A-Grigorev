@@ -1,3 +1,4 @@
+from _pytest.compat import NOTSET
 import pytest
 from selenium.webdriver.remote.webdriver import WebDriver
 from source.main.main_page import MainPage
@@ -13,18 +14,14 @@ class BaseCase:
 
     @pytest.fixture(scope='session')
     def cookies(self, config):
-        if not hasattr(config, 'workerinput'):
-            web_driver = get_driver(config)
-            web_driver.get(config['url'])
-            login_page = MainPage(web_driver)
-            login_page.login()
+        web_driver = get_driver(config)
+        web_driver.get(config['url'])
+        login_page = MainPage(web_driver)
+        login_page.login()
 
-            cookies = web_driver.get_cookies()
-            web_driver.quit()
-            return cookies
-        else:
-            return
-        
+        cookies = web_driver.get_cookies()
+        web_driver.quit()
+        return cookies
 
     @pytest.fixture(scope='function', autouse=True)
     def set_initial_up(self, web_driver, config, logger, request: FixtureRequest):

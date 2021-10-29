@@ -2,6 +2,7 @@ from source.dashboard.dashboard_locators import (
     DashboardLocators as DL,
 )
 from source.dashboard.campaign_page import  CampaignPage
+from source.dashboard.audience_page import AudiencePage
 from source.base_page.base_page_task import BasePage
 
 
@@ -22,3 +23,9 @@ class DashboardPage(BasePage):
         """        
         self.click(DL.MODULE_CAMPAIGN)
         return CampaignPage(self.web_driver)
+    
+    def get_audience_page(self):
+        """open audience page
+        """        
+        self.click(DL.MODULE_AUDIENCE)
+        return AudiencePage(self.web_driver)
