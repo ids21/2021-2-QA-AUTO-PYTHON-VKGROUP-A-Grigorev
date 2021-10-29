@@ -27,3 +27,22 @@ class TestMainPage(BaseCase):
             f"Check authorization if {credential} are incorrect"
         ):
             main_page_task.check_incorrect_credentials(credential)
+
+
+@allure.epic("Campaign Page")
+class TestCampaignPage(BaseCase):
+
+    authorize = True
+
+    @allure.story("Checking creating new campaign")
+    @pytest.mark.UI
+    def test_TCP001_check_creating_new_campaign(self):
+        with allure.step("Get campaign page"):
+            self.campaign = self.dashboard.get_campaign_page()
+        with allure.step("Create campaign"):
+            self.campaign.delete_campaign()
+            self.campaign.create_campaign()
+        with allure.step("Did campaign created?"):
+            self.campaign.check_campaign_added()
+        with allure.step("Post processing"):
+            self.campaign.delete_campaign()
