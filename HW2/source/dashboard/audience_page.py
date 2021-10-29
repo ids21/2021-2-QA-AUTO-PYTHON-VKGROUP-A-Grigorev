@@ -40,3 +40,12 @@ class AudiencePage(BasePage):
             assert False, "Segment dont created"
         finally:
             self.shot("Our Segment after creating")
+
+    def check_segments_deleted(self):
+        try:
+            num = self.len_elements(AL.RECORD_SEGEMTS, retry=True)[0]
+            assert num == None
+        except:
+            assert False, "Segments dont deleted"
+        finally:
+            self.shot("After deleting")

@@ -1,6 +1,4 @@
 from source.main.main_page import MainPage
-from source.dashboard.dashboard_page import DashboardPage
-from source.dashboard.campaign_page import CampaignPage
 from base import BaseCase
 
 import allure
@@ -65,3 +63,16 @@ class TestAudiencesPage(BaseCase):
             self.audience.check_segments_added()
         with allure.step("Post processing"):
             self.audience.delete_segments()
+
+    @allure.story("Checking deleting new segments")
+    @pytest.mark.UI
+    def test_TAP002_check_deleting_new_segments(self):
+        with allure.step("Get audience page"):
+            self.audience = self.dashboard.get_audience_page()
+        with allure.step("Create segments"):
+            self.audience.delete_segments()
+            self.audience.create_segments()
+            self.audience.delete_segments()
+        with allure.step("Did segments created?"):
+            self.audience.check_segments_deleted()
+
