@@ -27,8 +27,7 @@ class BaseCase:
     def set_initial_up(self, web_driver, config, logger, request: FixtureRequest):
         self.web_driver: WebDriver = web_driver
         self.config = config
-        if self.config['selenoid'] is None:
-            self.logger = logger
+        self.logger = logger
 
         if self.authorize:
             cookies = request.getfixturevalue('cookies')
