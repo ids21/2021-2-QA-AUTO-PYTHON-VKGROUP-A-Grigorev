@@ -6,21 +6,20 @@ from conftest import get_driver
 from _pytest.fixtures import FixtureRequest
 from time import sleep
 
+@pytest.fixture(scope='session')
+def cookies(config):
+    web_driver = get_driver(config)
+    web_driver.get(config['url'])
+    login_page = MainPage(web_driver)
+    login_page.login()
+
+    cookies = web_driver.get_cookies()
+    web_driver.quit()
+    return cookies
 
 class BaseCase:
 
     authorize = False
-
-    @pytest.fixture(scope='session')
-    def cookies(self, config):
-        web_driver = get_driver(config)
-        web_driver.get(config['url'])
-        login_page = MainPage(web_driver)
-        login_page.login()
-
-        cookies = web_driver.get_cookies()
-        web_driver.quit()
-        return cookies
 
     @pytest.fixture(scope='function', autouse=True)
     def set_initial_up(self, web_driver, config, logger, request: FixtureRequest):
