@@ -6,13 +6,10 @@ from source.base_page.base_page_task import BasePage
 
 class AudiencePage(BasePage):
     
-    def delete_segments(self):
-        """[summary]
-        """        
-        if self.len_elements(AL.RECORD_SEGEMTS, retry=True)[0] is not None:
+    def delete_segments(self):   
+        if self.len_elements(AL.RECORD_SEGEMTS, retry=True) is not None:
             self.click(AL.FIELD_REMOVE)
             self.click(AL.CONFIRM_DELETE)
-            #self.click(AL.REFRESH_TABLE)
             self.web_driver.refresh()
 
 
@@ -29,21 +26,15 @@ class AudiencePage(BasePage):
         self.click(AL.BUTTON_SUBMIT_CREATE)
         
 
-    def check_segments_added(self):
-        """[summary]
-        """      
+    def check_segments_added(self): 
         try:
             assert self.is_enabled(AL.RECORD_SEGEMTS)
         except:
             assert False, "Segment dont created"
-        finally:
-            self.shot("Our Segment after creating")
 
     def check_segments_deleted(self):
         try:
-            num = self.len_elements(AL.RECORD_SEGEMTS, retry=True)[0]
+            num = self.len_elements(AL.RECORD_SEGEMTS, retry=True)
             assert num == None
         except:
             assert False, "Segments dont deleted"
-        finally:
-            self.shot("After deleting")

@@ -3,12 +3,9 @@ import sys
 import shutil
 from pytest import fixture
 import logging
-from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
 import allure
 
+from source.fixtures import *
 
 
 DEFAULT_BROWSER = "chrome"
@@ -59,70 +56,6 @@ def config(request):
         'version': version,
     }
 
-def get_driver(config, download_dir=None):
-    browser_name = config['browser_name']
-    selenoid = config['selenoid']
-    vnc = config['vnc']
-    version = config['version']
-    options = Options()
-    if selenoid:
-        options.add_experimental_option(
-            "prefs", {"download.default_directory": '/home/selenium/Downloads'}
-        )
-        capabilities = {
-            'browserName': 'chrome',
-            'version': '80.0'
-        }
-        if vnc:
-            capabilities['enableVNC'] = True
-
-        browser = webdriver.Remote(
-            selenoid,
-            options=options,
-            desired_capabilities=capabilities
-        )
-    else:
-        if browser_name == 'chrome':
-            if download_dir is not None:
-                options.add_experimental_option(
-                    "prefs", {"download.default_directory": download_dir}
-                )
-            manager = ChromeDriverManager(
-                version='latest',
-                log_level=logging.CRITICAL
-            )
-            browser = webdriver.Chrome(
-                executable_path=manager.install(),
-                options=options
-            )
-        elif browser_name == 'firefox':
-            if download_dir is not None:
-                options.add_experimental_option(
-                    "prefs", {"browser.download.dir": download_dir}
-                )
-
-            manager = GeckoDriverManager(version='latest')
-            browser = webdriver.Firefox(
-                executable_path=manager.install(),
-                options=options
-            )
-        else:
-            raise RuntimeError(f'Unsupported browser: {browser_name}')
-
-    browser.maximize_window()
-    browser.implicitly_wait(0.2)
-    return browser
-
-
-@fixture(scope='function')
-def web_driver(config, temp_dir) -> object:
-    url = config['url']
-    web_driver = get_driver(config, download_dir=temp_dir)
-    web_driver.get(url)
-
-    yield web_driver
-    web_driver.quit()
-
 
 @fixture(scope='function')
 def logger(temp_dir, config):
@@ -154,6 +87,7 @@ def logger(temp_dir, config):
             attachment_type=allure.attachment_type.TEXT
         )
 
+
 def pytest_configure(config):
     if sys.platform.startswith('win'):
         base_dir = 'C:\\tests'
@@ -169,7 +103,7 @@ def pytest_configure(config):
     config.base_temp_dir = base_dir
 
 
-@fixture(scope='function')
+@pytest.fixture(scope='function')
 def temp_dir(request):
     test_dir = os.path.join(
         request.config.base_temp_dir,
@@ -177,22 +111,3 @@ def temp_dir(request):
     )
     os.makedirs(test_dir)
     return test_dir
-
-@fixture(scope='function', autouse=True)
-def ui_report(web_driver, request, temp_dir):
-    failed_test_count = request.session.testsfailed
-    yield
-    if request.session.testsfailed > failed_test_count:
-        screenshoot = os.path.join(temp_dir, 'failure.png')
-        web_driver.get_screenshot_as_file(screenshoot)
-        allure.attach.file(screenshoot, 'failure.png',
-            attachment_type=allure.attachment_type.PNG
-        )
-
-        browser_log = os.path.join(temp_dir, 'browser.log')
-        with open(browser_log, 'w') as f:
-            for i in web_driver.get_log('browser'):
-                f.write(f"{i['level']} - {i['source']}\n{i['message']}\n")
-        with open(browser_log, 'r') as f:
-            allure.attach(f.read(), 'browser.log',
-                        attachment_type=allure.attachment_type.TEXT)

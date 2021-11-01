@@ -27,8 +27,6 @@ class Wait:
 
     @staticmethod
     def wait_invisibility_of_element(driver, locator, timeout):
-        """
-        """
         return WebDriverWait(driver, timeout).until(
             ExpCond.invisibility_of_element_located(
                 (By.XPATH, locator)
@@ -37,8 +35,6 @@ class Wait:
 
     @staticmethod
     def wait_element_to_be_clickable(driver, locator, timeout):
-        """
-        """
         return WebDriverWait(driver, timeout).until(
             ExpCond.element_to_be_clickable((By.XPATH, locator))
         )
@@ -62,11 +58,10 @@ class BasePage(object):
         element = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
-            timeout=30
+            timeout=10
         )
         chains = self.action_chains
         chains.move_to_element(element)
-        chains.pause(1)
         chains.perform()
 
     def click(self, locator, timeout=None, loading=True):
@@ -75,19 +70,19 @@ class BasePage(object):
             Wait().wait_invisibility_of_element(
                 driver=self.web_driver,
                 locator=BaseLocators.SPINNER,
-                timeout=15
+                timeout=10
             )
         for i in range(CLICK_RETRY):
             try:
                 Wait().wait_until_precence_of_lement(
                     driver=self.web_driver,
                     locator=locator,
-                    timeout=30
+                    timeout=10
                 )
                 elem = Wait().wait_element_to_be_clickable(
                     driver=self.web_driver,
                     locator=locator,
-                    timeout=45
+                    timeout=10
                 )
                 self.scroll_to(elem)
                 elem.click()
@@ -100,7 +95,7 @@ class BasePage(object):
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
-            timeout=30
+            timeout=10
         )
         link.clear()
 
@@ -108,7 +103,7 @@ class BasePage(object):
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
-            timeout=30
+            timeout=10
         )
         link.send_keys(text)
 
@@ -117,12 +112,12 @@ class BasePage(object):
             Wait().wait_invisibility_of_element(
                 driver=self.web_driver,
                 locator=BaseLocators.SPINNER,
-                timeout=15
+                timeout=10
             )
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
-            timeout=40
+            timeout=10
         )
         return link.is_enabled()
 
@@ -130,7 +125,7 @@ class BasePage(object):
         link = Wait().wait_until_precence_of_lement(
             driver=self.web_driver,
             locator=locator,
-            timeout=30
+            timeout=10
         )
         text_atr: str = link.get_attribute(attribute)
         return text_atr
@@ -157,7 +152,7 @@ class BasePage(object):
             Wait().wait_invisibility_of_element(
                 driver=self.web_driver,
                 locator=BaseLocators.SPINNER,
-                timeout=15
+                timeout=10
             )
         if retry:
             for _ in range(CLICK_RETRY):
@@ -169,7 +164,7 @@ class BasePage(object):
                 else:
                     sleep(3)
         if number_elements_search == 0:
-            return None, None
+            return None
         else:
-            return number_elements_search, result_search
+            return number_elements_search
             

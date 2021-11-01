@@ -3,7 +3,7 @@ from source.dashboard.dashboard_locators import (
     CampaignLocator as CL,
 )
 from source.base_page.base_page_task import BasePage
-from time import sleep
+
 import os 
 
 
@@ -26,32 +26,21 @@ class CampaignPage(BasePage):
         scr = os.path.join(directory, "test.jpeg")
         self.move_to(CL.FIELD_UPLOAD_IMAGE)
         self.keys(CL.INPUT_IMAGE, scr)
-        sleep(1.5)
         self.shot("Adding campaign")
         self.click(CL.BUTTON_CREATE)
 
-    def check_campaign_added(self):
-        """[summary]
-        """      
+    def check_campaign_added(self): 
         try:
             assert self.is_enabled(CL.RECORD_CAMPAIGN)
         except:
             assert False, "Campaign dont created"
-        finally:
-            self.shot("Our campaign after creating")
 
-    def delete_campaign(self):
-        """[summary]
-        """        
-        while(True):
-            if self.len_elements(CL.RECORD_CAMPAIGN, retry=True)[0] is not None:
-                self.click(CL.SELECT_RECORD)
-                self.click(CL.DROP_ACTIONS)
-                self.click(CL.DELETE_RECORD)
-                #self.click(CL.REFRESH_TABLE)
-                self.web_driver.refresh()
-            else:
-                break
+    def delete_campaign(self):  
+        if self.len_elements(CL.RECORD_CAMPAIGN, retry=True) is not None:
+            self.click(CL.SELECT_RECORD)
+            self.click(CL.DROP_ACTIONS)
+            self.click(CL.DELETE_RECORD)
+            self.web_driver.refresh()
 
 
 
