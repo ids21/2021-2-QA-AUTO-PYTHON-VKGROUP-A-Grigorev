@@ -36,12 +36,12 @@ class TestCampaignPage(BaseCase):
 
     @allure.story("Checking creating new campaign")
     @pytest.mark.UI
-    def test_TCP001_check_creating_new_campaign(self):
+    def test_TCP001_check_creating_new_campaign(self, repo_root):
         with allure.step("Get campaign page"):
             self.campaign = self.dashboard.get_campaign_page()
         with allure.step("Create campaign"):
             self.campaign.delete_campaign()
-            self.campaign.create_campaign()
+            self.campaign.create_campaign(repo_root)
         with allure.step("Did campaign created?"):
             self.campaign.check_campaign_added()
         with allure.step("Post processing"):
@@ -58,7 +58,6 @@ class TestAudiencesPage(BaseCase):
         with allure.step("Get audience page"):
             self.audience = self.dashboard.get_audience_page()
         with allure.step("Create segments"):
-            self.audience.delete_segments()
             self.audience.create_segments()
         with allure.step("Did segments created?"):
             self.audience.check_segments_added()
@@ -71,7 +70,6 @@ class TestAudiencesPage(BaseCase):
         with allure.step("Get audience page"):
             self.audience = self.dashboard.get_audience_page()
         with allure.step("Create segments"):
-            self.audience.delete_segments()
             self.audience.create_segments()
             self.audience.delete_segments()
         with allure.step("Did segments deleted?"):

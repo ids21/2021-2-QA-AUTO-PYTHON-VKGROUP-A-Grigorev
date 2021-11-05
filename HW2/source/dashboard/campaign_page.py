@@ -9,7 +9,7 @@ import os
 
 class CampaignPage(BasePage):
 
-    def create_campaign(self):
+    def create_campaign(self, repo_root):
         """Create new campaign
         """        
         if self.is_enabled(CL.BUTTON_CREATE_CAMPAIGN):
@@ -22,8 +22,7 @@ class CampaignPage(BasePage):
         self.keys(CL.BUDGET_PER_DAY, '100')
         self.keys(CL.BUDGET_TOTAL,'1000')
         self.click(CL.FIELD_BANNER)
-        directory = os.getcwd()
-        scr = os.path.join(directory, "test.jpeg")
+        scr = os.path.join(repo_root, "test.jpeg")
         self.move_to(CL.FIELD_UPLOAD_IMAGE)
         self.keys(CL.INPUT_IMAGE, scr)
         self.shot("Adding campaign")
