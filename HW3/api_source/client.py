@@ -180,9 +180,46 @@ class ApiClient(APIBaseClient):
             }
         }
 
-    def get_campaign(self, campaign_id: int) -> dict:
+    def get_campaign(self, id) -> dict:
         return self._request(
             "GET",
             urljoin(
-                self.base_url, f"api/v2/campaigns/{campaign_id}.json?fields=id,name,status")
+                self.base_url, f"api/v2/campaigns/{id}.json?fields=id,name,status")
         )
+
+    def post_delete_segment(self, id):
+        url = urljoin(self.base_url, f'api/v2/remarketing/segments/{id}.json')
+
+        headers = {
+            'X-CSRFToken': self.session.cookies.get('csrftoken')
+        }
+
+        return self._request(
+            "DELETE",
+            url,
+            headers=headers,
+            expected_status=204,
+            jsonify=False
+        )
+
+    def post_create_segment(self, segment):
+        url = urljoin(self.base_url, 'api/v2/remarketing/segments.json?fields=id,name')
+
+        headers = {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': self.session.cookies.get('csrftoken')
+        }
+
+        return self._request(
+            "POST",
+            url,
+            headers=headers,
+            json=segment
+        )
+
+    def get_segment(self,id):
+        return self._request(
+            "GET",
+            urljoin(
+                self.base_url, f'/api/v2/remarketing/segments/{id}.json'
+        ))

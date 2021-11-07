@@ -1,4 +1,3 @@
-from typing import ChainMap
 import pytest
 import allure
 
@@ -32,7 +31,7 @@ class CampaignsBase(ApiBase):
         self.api_client.post_delete_campaign(data['id_after_add'])
 
 @allure.epic("API")
-@allure.feature("Authorization")
+@allure.feature("Campaign")
 class TestCampaign(CampaignsBase):
 
     @allure.story("Check create campaign")
