@@ -6,12 +6,11 @@ from api_source.client import  ApiClient
 
 class ApiBase:
     authorize = True
-    publish = True
-    blog_id = 378
+    api_client: ApiClient = None
 
     @pytest.fixture(scope='function', autouse=True)
-    def setup(self, api_client, logger):
-        self.api_client: ApiClient = api_client
+    def setup(self, api_client: ApiClient, logger):
+        self.api_client = api_client
         self.builder = Builder()
         self.logger = logger
 
