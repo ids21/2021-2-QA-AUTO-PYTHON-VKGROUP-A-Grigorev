@@ -5,7 +5,6 @@ from pytest import fixture
 import logging
 import allure
 
-from source.fixtures import *
 from api_source.client import ApiClient
 from source.base_page.data import Credentials
 
@@ -14,47 +13,17 @@ DEFAULT_VERSION_BROWSER = "94.0"
 
 
 def pytest_addoption(parser):
-    parser.addoption(
-        '--browser_name',
-        action='store',
-        default=DEFAULT_BROWSER,
-        help="Choose browser: chrome or firefox"
-    )
-    parser.addoption(
-        '--browser_version',
-        action='store',
-        default=DEFAULT_VERSION_BROWSER,
-        help="Choose version"
-    )
     parser.addoption('--url', default='https://target.my.com/')
-    parser.addoption('--selenoid', action='store_true')
-    parser.addoption('--vnc', action='store_true')
     parser.addoption('--debug_log', action='store_true')
 
 
 @fixture(scope='session')
 def config(request):
-    browser_name = request.config.getoption("browser_name")
     url = request.config.getoption('--url')
-    version = request.config.getoption('--browser_version')
     debug_log = request.config.getoption('--debug_log')
-    if request.config.getoption('--selenoid'):
-        selenoid = 'http://localhost:4444/wd/hub/'
-        if request.config.getoption('--vnc'):
-            vnc = True
-        else:
-            vnc = False
-    else:
-        selenoid = None
-        vnc = False
-
     return {
-        'browser_name': browser_name,
         'url': url,
         'debug_log': debug_log,
-        'selenoid': selenoid,
-        'vnc': vnc,
-        'version': version,
     }
 
 
@@ -104,7 +73,7 @@ def pytest_configure(config):
     config.base_temp_dir = base_dir
 
 
-@pytest.fixture(scope='function')
+@fixture(scope='function')
 def temp_dir(request):
     test_dir = os.path.join(
         request.config.base_temp_dir,
@@ -114,13 +83,13 @@ def temp_dir(request):
     return test_dir
 
 
-@pytest.fixture(scope='session')
+@fixture(scope='session')
 def repo_root():
     return os.path.abspath(os.path.join(__file__, os.path.pardir))
 
 
 
-@pytest.fixture(scope='session')
+@fixture(scope='session')
 def api_client(config):
     credentials = dict(
         user=Credentials.USERNAME,
