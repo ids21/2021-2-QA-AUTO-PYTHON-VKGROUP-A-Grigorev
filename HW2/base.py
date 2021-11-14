@@ -15,7 +15,8 @@ class BaseCase:
         self.web_driver: WebDriver = web_driver
         self.config = config
         self.logger = logger
-
+        self.main_page = MainPage(self.web_driver) 
+        
         if self.authorize:
             cookies = request.getfixturevalue('cookies')
             sleep(1)

@@ -30,8 +30,6 @@ class MainPage(BasePage):
             assert 'disabled' in self.get_attr(Locators.BUTTON_AUTH, 'class')
         except:
             assert False, "Auth button should be disabled "
-        finally:
-            self.shot(description="Login attempt without data.Auth button should be disabled")
 
     def check_incorrect_credentials(self, credential):
         """Check authorization if credential incorrect
@@ -55,5 +53,3 @@ class MainPage(BasePage):
             assert self.is_enabled(Locators.RETRY_AUTH_FORM)
         except:
             assert False, "Should be retry auth form there"
-        finally:
-            self.shot(description="Retrying the login")
