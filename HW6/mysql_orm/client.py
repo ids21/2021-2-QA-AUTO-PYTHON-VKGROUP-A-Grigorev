@@ -20,7 +20,7 @@ class MySQLORMClient:
 
     def connect(self, db_created=True):
         db = self.db_name if db_created else ''
-        url = f'mysql+pymsql://{self.user}:{self.password}@{self.host}:{self.port}/{db}'
+        url = f'mysql+pymysql://{self.user}:{self.password}@{self.host}:{self.port}/{db}'
 
         self.engine = sqlalchemy.create_engine(url, encoding='utf8')
         self.connection = self.engine.connect()

@@ -15,3 +15,8 @@ class MysqlBase:
         self.mysql_builder: MySQLBuilder = MySQLBuilder(self.mysql)
         
         self.prepare()
+
+    def get_count_records(self, model):
+        self.mysql.session.commit() 
+        count_records = self.mysql.session.query(model).count()
+        return count_records

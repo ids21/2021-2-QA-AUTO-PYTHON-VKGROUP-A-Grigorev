@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, ForeignKey
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -8,10 +8,10 @@ class CountRequest(Base):
     __tablename__ = "count_request"
     __table_args__ = {'mysql_charset': 'utf8'}
 
+    count = Column(Integer, nullable=False, primary_key=True)
+    
     def __repr__(self):
         return f"<CountRequest(count='{self.count}'>"
-
-    count = Column(Integer, nullable=False)
 
 class RequestTypeCount(Base):
     __tablename__ = 'request_types_count'

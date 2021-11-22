@@ -14,6 +14,8 @@ def pytest_configure(config):
         mysql_orm_client.create_table(table_name='largest_4xx_requests')
         mysql_orm_client.create_table(table_name='users_with_5xx_requests')
         mysql_orm_client.connection.close()
+        
+    config.mysql_orm_client = mysql_orm_client
 
 @pytest.fixture(scope='session')
 def mysql_orm_client(request) -> MySQLORMClient:
