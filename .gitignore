@@ -137,3 +137,5 @@ drivers/
 #allure directory
 result/
 report/
+
+*.swp
