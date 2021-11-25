@@ -132,11 +132,11 @@ dmypy.json
 .vscode/
 
 # web drivers
-
 drivers/
 
 #allure directory
 result/
 report/
+
 
 *.swp
