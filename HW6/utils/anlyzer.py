@@ -22,10 +22,10 @@ def count_request_types():
     return req_types
 
 
-def most_frequent_requests():
+def most_frequent_requests(count_most_common:int= 10):
     with open(LOG_FILE, 'r') as log:
         url_column = [req.split()[6] for req in log.readlines()]
-        freq_requests = Counter(url_column).most_common(10)
+        freq_requests = Counter(url_column).most_common(count_most_common)
 
     return freq_requests
 

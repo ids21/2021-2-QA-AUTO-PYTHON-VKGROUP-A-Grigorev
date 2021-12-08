@@ -1,5 +1,6 @@
 from test_sql.base import MysqlBase
 from utils import anlyzer
+import allure
 from models.model import (
     CountRequest, 
     RequestTypeCount, 
@@ -16,7 +17,9 @@ class TestRequestsCount(MysqlBase):
         self.count_records = self.get_count_records(model=CountRequest)
         self.mysql_builder.create_requests_count(req_count)
 
-    def test_did_request_count_added(self):
+    def test_did_request_count_added(self, create_table_count_request):
+        with allure.step("Preproccessing"):
+            self.prepare()
         after_count = self.get_count_records(model=CountRequest)
         assert self.count_records != after_count, (
             f"Error occured after insert data: {self.count_records} != {after_count}"
@@ -32,7 +35,10 @@ class TestRequestTypesCount(MysqlBase):
                 req_type=req_type[0], 
                 count=req_type[1]
             )
-    def test_most_did_request_type_count_info_added(self):
+
+    def test_most_did_request_type_count_info_added(self, create_table_request_types_count):
+        with allure.step("Preproccessing"):
+            self.prepare()
         after_count = self.get_count_records(model=RequestTypeCount)
         assert self.count_records != after_count, (
             f"Error occured after insert data: {self.count_records} != {after_count}"
@@ -50,7 +56,9 @@ class TestMostFrequentRequests(MysqlBase):
                 count=most_freq_req[1]
             )
 
-    def test_most_did_most_frequent_request_info_added(self):
+    def test_most_did_most_frequent_request_info_added(self, create_table_most_frequent_requests):
+        with allure.step("Preproccessing"):
+            self.prepare()
         after_count = self.get_count_records(model=MostFrequentRequest)
         assert self.count_records != after_count, (
             f"Error occured after insert data: {self.count_records} != {after_count}"
@@ -70,7 +78,9 @@ class TestLargest4xxRequests(MysqlBase):
                 size=req[1], 
                 ip=req[2]
             )
-    def test_most_did_largest_4xx_requests_info_added(self):
+    def test_most_did_largest_4xx_requests_info_added(self, create_table_largest_4xx_requests):
+        with allure.step("Preproccessing"):
+            self.prepare()
         after_count = self.get_count_records(model=Largest4xxRequest)
         assert self.count_records != after_count, (
             f"Error occured after insert data: {self.count_records} != {after_count}"
@@ -90,7 +100,9 @@ class TestUsersWith5xxRequests(MysqlBase):
                 requests_number=user[1]
             )
 
-    def test_most_did_users_with_5xx_reqs_info_added(self):
+    def test_most_did_users_with_5xx_reqs_info_added(self, create_table_users_with_5xx_requests):
+        with allure.step("Preproccessing"):
+            self.prepare()
         after_count = self.get_count_records(model=UserWith5xxRequests)
         assert self.count_records != after_count, (
             f"Error occured after insert data: {self.count_records} != {after_count}"
