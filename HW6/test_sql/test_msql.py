@@ -30,10 +30,10 @@ class TestRequestTypesCount(MysqlBase):
     def prepare(self):
         req_types_count = anlyzer.count_request_types()
         self.count_records = self.get_count_records(model=RequestTypeCount)
-        for req_type in req_types_count:
+        for req_type, req_count in req_types_count.items():
             self.mysql_builder.create_request_type_count(
-                req_type=req_type[0], 
-                count=req_type[1]
+                req_type=req_type, 
+                count=req_count
             )
 
     def test_most_did_request_type_count_info_added(self, create_table_request_types_count):

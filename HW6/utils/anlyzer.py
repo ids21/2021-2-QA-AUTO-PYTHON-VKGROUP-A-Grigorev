@@ -14,10 +14,16 @@ def count_requests():
     return all_requests_count
 
 
+VALID_REQUESTS = ['PUT', 'DELETE', 'GET', 'POST', 'HEAD']
+
 def count_request_types():
     with open(LOG_FILE, 'r') as log:
         request_by_type = [req.split()[5][1:] for req in log.readlines()]
-        req_types = Counter(request_by_type).most_common()
+        req_types = dict(Counter(request_by_type).most_common())
+        for key, value in req_types.items():
+            if key not in VALID_REQUESTS:
+                req_types['INVALID_REQUEST'] = req_types.pop(key)
+                
 
     return req_types
 
