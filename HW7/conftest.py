@@ -30,7 +30,7 @@ class App:
             'MOCK_PORT':settings.MOCK_PORT,
         })
         
-        proc = subprocess.Popen(['venv/Scripts/python', app_path],
+        proc = subprocess.Popen(['python3.8', app_path],
                                 stdout=app_out, stderr=app_err, env=env)
 
         config.app_proc = proc
@@ -40,7 +40,10 @@ class App:
         Waiter.wait_ready(settings.APP_HOST, settings.APP_PORT)
 
     def stop_app(self, config):
-        config.app_proc.send_signal(signal.CTRL_BREAK_EVENT)
+        if sys.platform.startswith('win'):
+            config.app_proc.send_signal(signal.CTRL_BREAK_EVENT)
+        else:
+            config.app_proc.send_signal(signal.SIGINT)
         exit_code = config.app_proc.wait()
 
         config.app_out.close()
