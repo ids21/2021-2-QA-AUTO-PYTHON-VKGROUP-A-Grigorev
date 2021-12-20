@@ -44,6 +44,10 @@ pipeline {
 
         stage('Stop myapp') {
             steps {
+
+                sh "docker-compose logs > integration-test.log"
+                archive 'integration-test.log'
+
                 step([
                     $class: 'DockerComposeBuilder',
                     dockerComposeFile: './final_project/docker-compose.yml',

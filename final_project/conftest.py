@@ -2,6 +2,8 @@ import os
 import shutil
 import pytest
 import sys
+import logging
+import allure
 from mysql.builder import MySQLBuilder
 from mysql.client import MySQLClient
 from api_source.client import ApiClient
@@ -92,3 +94,29 @@ def login_api(fake_data, api_client, mysql_builder):
 
 
     return api_client
+
+
+@pytest.fixture(scope='function', autouse=True)
+def logger(temp_dir, config):
+    log_formatter = logging.Formatter('%(asctime)s - %(filename)-15s - %(levelname)-6s - %(message)s')
+    log_file = os.path.join(temp_dir, 'test.log')
+
+    log_level = logging.INFO
+
+    file_handler = logging.FileHandler(log_file, 'w')
+    file_handler.setFormatter(log_formatter)
+    file_handler.setLevel(log_level)
+
+    log = logging.getLogger('test')
+    log.propagate = False
+    log.setLevel(log_level)
+    log.handlers.clear()
+    log.addHandler(file_handler)
+
+    yield log
+
+    for handler in log.handlers:
+        handler.close()
+
+    with open(log_file, 'r') as f:
+        allure.attach(f.read(), 'test.log', attachment_type=allure.attachment_type.TEXT)

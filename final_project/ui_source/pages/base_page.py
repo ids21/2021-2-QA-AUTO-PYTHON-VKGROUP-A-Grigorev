@@ -3,6 +3,7 @@ import allure
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
+import logging
 from selenium.webdriver.support.wait import WebDriverWait
 
 CLICK_RETRY = 3
@@ -21,6 +22,7 @@ class BasePage:
 
     def __init__(self, driver):
         self.driver = driver
+        self.logger = logging.getLogger('test')
 
     @allure.step('Клик по локатору {locator}...')
     def click(self, locator, timeout=10):
@@ -29,7 +31,9 @@ class BasePage:
                 element = self.find(locator, timeout=timeout)
                 self.scroll_to(element)
                 element = self.wait(timeout).until(EC.element_to_be_clickable(locator))
+                self.logger.info(f'Clicking on {locator}')
                 element.click()
+                
                 return
             except StaleElementReferenceException:
                 if i == CLICK_RETRY - 1:
@@ -51,15 +55,6 @@ class BasePage:
         field = self.wait(timeout).until(EC.visibility_of_element_located(locator))
         field.clear()
         field.send_keys(message)
-
-    @allure.step('Клик по спрятанному локатору {locator_hide}...')
-    def click_on_hidden_element(self, locator_main, locator_hide):
-        main = self.find(locator_main)
-        hide = self.find(locator_hide)
-        actions = ActionChains(self.driver)
-        actions.move_to_element(main)
-        actions.click(hide)
-        actions.perform()
 
     @allure.step('Переключение на вторую вкладку в браузере...')
     def switch_to_second_tab(self):
