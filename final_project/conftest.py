@@ -79,8 +79,8 @@ def mysql_builder(mysql_client) -> MySQLBuilder:
 
 @pytest.fixture(scope='function')
 def api_client(config) -> ApiClient:
-    # return ApiClient(url = 'http://0.0.0.0:9999/')
-    return ApiClient(config['url'])
+    return ApiClient(url = 'http://0.0.0.0:9999/')
+    # return ApiClient(config['url'])
 
 @pytest.fixture(scope='function')
 def login_api(fake_data, api_client, mysql_builder):

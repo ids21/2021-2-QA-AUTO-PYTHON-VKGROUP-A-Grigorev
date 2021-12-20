@@ -118,11 +118,3 @@ class ApiClient(APIBaseClient):
         response = self._request('GET', location, expected_status=expected_status)
 
         return response
-
-    @allure.step('Получение id по mock')
-    def get_vk_id(self, username, expected_status=200):
-        location = f'/vk_id/{username}'
-
-        response = self._request('GET', location, expected_status=expected_status)
-
-        return response

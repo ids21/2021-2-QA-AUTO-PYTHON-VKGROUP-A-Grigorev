@@ -131,13 +131,3 @@ class TestAPI:
         user = Builder.create_user()
         username = user.username
         api_client.post_login(username=username, password=None, expected_status=400)
-
-    @pytest.mark.API
-    def test_vk_id(self, api_client):
-        """
-        Тест проверки vk_id Sasha приложения через API.
-        Отправление GET-запроса на '/vk_id'.
-        Ожидаемый результат: код ответа 200 (действие выполнено) и vk_id.
-        """
-        response = api_client.get_vk_id('Sasha1')
-        assert response.status_code == 200
