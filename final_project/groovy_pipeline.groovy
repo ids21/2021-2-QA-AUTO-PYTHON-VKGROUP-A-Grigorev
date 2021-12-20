@@ -46,7 +46,8 @@ pipeline {
             steps {
                 sh "cd ./final_project && docker-compose logs > integration-test.log"
                 sh "cd ./final_project && docker-compose down --rmi local --volumes --remove-orphans"
-                archive 'integration-test.log'
+                archive './final_project/integration-test.log'
+                archiveArtifacts artifacts: './final_project/integration-test.log', fingerprint: true
             }
         }
     }
