@@ -44,16 +44,9 @@ pipeline {
 
         stage('Stop myapp') {
             steps {
-
-                sh "docker-compose logs > integration-test.log"
+                sh "cd ./final_project && docker-compose logs > integration-test.log"
+                sh "cd ./final_project && docker-compose down --rmi local --volumes --remove-orphans"
                 archive 'integration-test.log'
-
-                step([
-                    $class: 'DockerComposeBuilder',
-                    dockerComposeFile: './final_project/docker-compose.yml',
-                    option: [$class: 'StopAllServices'],
-                    useCustomDockerComposeFile: true
-                ])
             }
         }
     }
