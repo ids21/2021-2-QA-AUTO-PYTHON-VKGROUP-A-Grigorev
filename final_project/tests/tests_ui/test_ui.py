@@ -1,3 +1,4 @@
+from ui_source.locators.main_page import MainLocators
 import pytest
 import allure
 from utils.builder import Builder
@@ -5,11 +6,11 @@ from tests.tests_ui.base import BaseCase
 
 
 @allure.epic('Тесты на UI')
-@allure.story('Тесты на авторизацию')
+@allure.feature('Тесты на авторизацию')
 class TestLoginPage(BaseCase):
-    
+
     registration = False
-    
+
     @pytest.mark.UI
     def test_fields_validation(self, ui_report):
         """
@@ -79,10 +80,7 @@ class TestLoginPage(BaseCase):
         assert 'Registration' in self.registration_page.driver.page_source
 
 
-from ui_source.locators.main_page import MainLocators
-
-
-
+@allure.feature('Тесты Главного меню')
 class TestMainPage(BaseCase):
 
     locators = MainLocators()
@@ -92,7 +90,8 @@ class TestMainPage(BaseCase):
         [
             (locators.PYTHON_BUTTON, ('Python history', 'About Flask')),
             (locators.LINUX_BUTTON, ('Download Centos7')),
-            (locators.NETWORK_BUTTON, ('Wireshark', 'News', 'Download', 'Tcpdump', 'Examples'))
+            (locators.NETWORK_BUTTON, ('Wireshark',
+             'News', 'Download', 'Tcpdump', 'Examples'))
         ],
         ids=['dropdown_python', 'dropdown_linux', 'dropdown_network']
     )
@@ -103,14 +102,14 @@ class TestMainPage(BaseCase):
         for result in expected_results:
             assert result in self.web_driver.page_source
 
-
     @pytest.mark.UI
     @allure.description('Проверка открытия ссылки Download Centos7')
     def test_ui_open_links(self, ui_report):
-        expected_result ='Download Centos7'
+        expected_result = 'Download Centos7'
         self.main_page.open_redirect_page(expected_result)
 
 
+@allure.feature('Тесты регистрации')
 class TestRegistrationPage(BaseCase):
 
     registration = False
