@@ -20,13 +20,9 @@ class BaseCase:
         self.registration_page = RegistrationPage(self.web_driver)
         self.main_page = MainPage(self.web_driver)
         if self.registration:
-            # cookies = request.getfixturevalue('cookies')
-            # for cookie in cookies:
-            #     if 'sameSite' in cookie:
-            #         if cookie['sameSite'] == 'None':
-            #             cookie['sameSite'] = 'Strict'
-            #     self.web_driver.add_cookie(cookie)
+            cookies = request.getfixturevalue('cookies')
+            self.web_driver.add_cookie(cookies)
 
-            # self.web_driver.refresh()
-            self.login_page.go_to_registration_page()
-            self.registration_page.register()
+            self.web_driver.refresh()
+            # self.login_page.go_to_registration_page()
+            # self.registration_page.register()

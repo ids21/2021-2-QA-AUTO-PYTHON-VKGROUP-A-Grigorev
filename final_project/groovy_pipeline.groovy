@@ -36,7 +36,7 @@ pipeline {
             steps {
                 catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE'){
                     script{
-                        sh """pwd requirements.txt && pip3 install -r requirements.txt && cd ./final_project/tests && python3 -m pytest -m=${MARKER} --alluredir=$WORKSPACE/allure-results"""
+                        sh """pwd requirements.txt && pip3 install -r requirements.txt && cd ./final_project/tests && python3 -m pytest -n ${NUMBER} -m=${MARKER} --alluredir=$WORKSPACE/allure-results"""
                     }
                 }
             }

@@ -20,7 +20,7 @@ class LoginPage(BasePage):
         self.send_message(self.locators.PASSWORD, password)
         self.click(self.locators.LOGIN_BUTTON)
 
-        if self.driver.current_url == 'http://myapp:9999/welcome/':
+        if self.driver.current_url == 'http://myapp_proxy:8070/welcome/':
             with allure.step(
                 'Авторизация прошла успешно! Выполнен переход на главную страницу.'
             ):
@@ -40,5 +40,5 @@ class LoginPage(BasePage):
     @allure.step('Переход со страницы авторизации на страницу регистрации...')
     def go_to_registration_page(self):
         self.click(self.locators.REGISTRATION_BUTTON)
-        if self.driver.current_url == 'http://myapp:9999/reg':
+        if self.driver.current_url == 'http://myapp_proxy:8070/reg':
             return RegistrationPage(self.driver)

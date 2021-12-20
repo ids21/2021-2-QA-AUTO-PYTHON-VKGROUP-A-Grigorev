@@ -98,7 +98,29 @@ class TestMainPage(BaseCase):
     )
     @pytest.mark.UI
     @allure.description('Проверка открытия всех выпадающих списков на панели навигации')
-    def test_ui_check_dropdown(self, locator, expected_results):
+    def test_ui_check_dropdown(self, locator, expected_results, ui_report):
         self.main_page.open_dropdow_menu(locator)
         for result in expected_results:
-            assert result in self.driver.page_source
+            assert result in self.web_driver.page_source
+
+
+    @pytest.mark.UI
+    @allure.description('Проверка открытия ссылки Download Centos7')
+    def test_ui_open_links(self, ui_report):
+        expected_result ='Download Centos7'
+        self.main_page.open_redirect_page(expected_result)
+
+
+class TestRegistrationPage(BaseCase):
+
+    registration = False
+
+    @pytest.mark.UI
+    def test_fields_validation(self, ui_report):
+        """
+        Тест валидации полей в форме регистрации.
+        Проверяет наличие атрибута required у полей.
+        Ожидаемый результат: у полей присутствует валидация.
+        """
+        self.login_page.go_to_registration_page()
+        self.registration_page.check_fields_validation()

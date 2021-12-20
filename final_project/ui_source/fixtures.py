@@ -70,5 +70,8 @@ def cookies(config, mysql_builder):
     mysql_builder.add_user(username, password, email)
     login_page.login(username, password)
     cookies = web_driver.get_cookies()
+    new_cookie = {}
+    new_cookie['name'] = cookies[0]['name']
+    new_cookie['value'] = cookies[0]['value']
     web_driver.quit()
-    return cookies
+    return new_cookie

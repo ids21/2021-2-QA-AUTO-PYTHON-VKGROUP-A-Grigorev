@@ -11,7 +11,7 @@ from utils.builder import Builder
 
 
 def pytest_addoption(parser):
-    parser.addoption('--url', default='http://myapp:9999')
+    parser.addoption('--url', default='http://myapp_proxy:8070')
     parser.addoption('--vnc', action='store_true')
 
 @pytest.fixture(scope='session')
@@ -78,8 +78,8 @@ def mysql_builder(mysql_client) -> MySQLBuilder:
     return MySQLBuilder(mysql_client)
 
 @pytest.fixture(scope='function')
-def api_client(config):
-    return ApiClient(config['url'])
+def api_client(config) -> ApiClient:
+    return ApiClient(url = 'http://0.0.0.0:9999/')
 
 @pytest.fixture(scope='function')
 def login_api(fake_data, api_client, mysql_builder):
