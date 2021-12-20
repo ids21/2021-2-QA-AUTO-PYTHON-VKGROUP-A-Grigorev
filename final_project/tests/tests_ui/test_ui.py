@@ -80,6 +80,7 @@ class TestLoginPage(BaseCase):
         assert 'Registration' in self.registration_page.driver.page_source
 
 
+@allure.epic('Тесты на UI')
 @allure.feature('Тесты Главного меню')
 class TestMainPage(BaseCase):
 
@@ -109,6 +110,7 @@ class TestMainPage(BaseCase):
         self.main_page.open_redirect_page(expected_result)
 
 
+@allure.epic('Тесты на UI')
 @allure.feature('Тесты регистрации')
 class TestRegistrationPage(BaseCase):
 
