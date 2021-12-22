@@ -21,7 +21,7 @@ class TestGetRequests:
 
     def test_get_age(self):
         client = SocketClient(host=MOCK_HOST, port=MOCK_PORT)
-        name = "Aybulat"
+        name = "Andrey"
         resp = client.get(f'/get_age/{name}')
         assert resp['status_code'] == 200
 
