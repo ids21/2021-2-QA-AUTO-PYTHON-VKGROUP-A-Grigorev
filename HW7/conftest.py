@@ -30,7 +30,7 @@ class App:
             'MOCK_PORT':settings.MOCK_PORT,
         })
         
-        proc = subprocess.Popen(['python3.8', app_path],
+        proc = subprocess.Popen(['python3', app_path],
                                 stdout=app_out, stderr=app_err, env=env)
 
         config.app_proc = proc

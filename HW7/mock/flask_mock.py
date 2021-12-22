@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import json
 import threading
 
@@ -30,7 +32,6 @@ def edit_user():
     else:
         return jsonify(f'{name} does not exist'), 404
 
-
 @app.route("/delete_record/<name>", methods=["DELETE"])
 def delete_user(name):
     if name in USER_DATA:
@@ -52,11 +53,12 @@ def run_mock():
 
 def shutdown_mock():
     terminate_func = request.environ.get('werkzeug.server.shutdown')
-    if terminate_func:
-        terminate_func()
+    if terminate_func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    terminate_func()
 
 
-@app.route('/shutdown')
+@app.get('/shutdown')
 def shutdown():
     shutdown_mock()
-    return jsonify(f'Bye (^.^)/'), 200
+    return jsonify('Bye (^.^)/'), 200
