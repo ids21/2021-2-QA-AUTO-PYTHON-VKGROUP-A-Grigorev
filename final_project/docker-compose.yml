@@ -1,0 +1,89 @@
+version: '2.1'
+
+networks:
+  selenoid:
+    external:
+      name: selenoid
+
+services:
+  selenoid:
+    networks: 
+      selenoid: null
+    image: 'aerokube/selenoid:1.10.7'
+    container_name: 'selenoid'
+    volumes:
+      - '/home/aleksandr/2021-2-QA-AUTO-PYTHON-VKGROUP-A-Grigorev/final_project/docker:/etc/selenoid/'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    command:
+      ['-conf', '/etc/selenoid/browsers.json', '-container-network', 'selenoid']
+    ports:
+      - '4444:4444'
+  
+  selenoid-ui:
+    networks:
+      selenoid: null
+    image: "aerokube/selenoid-ui"
+    container_name: 'selenoid_ui'
+    links:
+      - 'selenoid:selenoid'
+    command: ["--selenoid-uri", "http://selenoid:4444"]
+    ports:
+      - '8080:8080'
+
+  mysql_db:
+    networks:
+      selenoid: null
+    image: 'percona:latest'
+    container_name: 'mysql_db'
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: DB_MYAPP
+      MYSQL_USER: test_qa
+      MYSQL_PASSWORD: qa_test
+    ports:
+      - '3306:3306'
+    volumes:
+      - '/home/aleksandr/2021-2-QA-AUTO-PYTHON-VKGROUP-A-Grigorev/final_project/mysql/myapp_db:/docker-entrypoint-initdb.d'
+    healthcheck:
+      test: ['CMD', 'mysql', '-uroot', '-padmin', '-h0.0.0.0', '-P3306']
+      timeout: 2s
+      retries: 15
+
+  mock:
+    networks:
+      selenoid: null
+    image: 'vk_api'
+    container_name: 'mock'
+    ports:
+      - '9000:9000'
+
+  myapp:
+    networks:
+      selenoid: null
+    image: 'myapp'
+    container_name: 'myapp'
+    volumes:
+      - '/home/aleksandr/2021-2-QA-AUTO-PYTHON-VKGROUP-A-Grigorev/final_project:/project'
+    ports:
+      - '9999:9999'
+    links:
+      - 'mock:mock'
+      - 'mysql_db:mysql_db'
+    command: ['/app/myapp', '--config=/project/myapp.conf']
+    depends_on:
+      selenoid:
+        condition: service_started
+      selenoid-ui:
+        condition: service_started
+      mysql_db:
+        condition: service_healthy
+
+  myapp_proxy:
+    networks:
+      selenoid: null
+    image: 'nginx:stable'
+    volumes:
+      - /home/aleksandr/2021-2-QA-AUTO-PYTHON-VKGROUP-A-Grigorev/final_project/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      myapp:
+        condition: service_started
