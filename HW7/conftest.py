@@ -19,39 +19,10 @@ class App:
     def start_app(self, config):
         from application import app
         app.run_app()
-        # app_path = os.path.join(repo_root, 'application', 'app.py')
-
-        # app_out = open(repo_root + '/' + 'app_stdout.log', 'w')
-        # app_err = open(repo_root + '/' + 'app_stderr.log', 'w')
-
-        # env = copy(os.environ)
-        # env.update({
-        #     'APP_HOST': settings.APP_HOST,
-        #     'APP_PORT': settings.APP_PORT,s
-        #     'MOCK_HOST':settings.MOCK_HOST,
-        #     'MOCK_PORT':settings.MOCK_PORT,
-        # })
-        
-        # proc = subprocess.Popen(['python3', app_path],
-        #                         stdout=app_out, stderr=app_err, env=env)
-
-        # config.app_proc = proc
-        # config.app_out = app_out
-        # config.app_err = app_err
 
         Waiter.wait_ready(settings.APP_HOST, settings.APP_PORT)
 
     def stop_app(self, config):
-        # if sys.platform.startswith('win'):
-        #     config.app_proc.send_signal(signal.CTRL_BREAK_EVENT)
-        # else:
-        #     config.app_proc.send_signal(signal.SIGINT)
-        # exit_code = config.app_proc.wait()
-
-        # config.app_out.close()
-        # config.app_err.close()
-
-        # assert exit_code == 0
         requests.get(
             f'http://{settings.APP_HOST}:{settings.APP_PORT}/shutdown')
 

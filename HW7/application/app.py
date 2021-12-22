@@ -47,10 +47,3 @@ def shutdown_app():
 def shutdown():
     shutdown_app()
     return jsonify('Bye (^.^)/'), 200
-
-# if __name__ == '__main__':
-#     host = os.environ.get('APP_HOST', '127.0.0.1')
-#     port = os.environ.get('APP_PORT', '8080')
-
-#     app.run(host, port)
-    
